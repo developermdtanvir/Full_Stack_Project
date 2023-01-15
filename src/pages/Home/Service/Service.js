@@ -6,7 +6,7 @@ export const Service = () => {
     const [services, setServices] = useState([]);
     console.log(services);
     useEffect(() => {
-        fetch('/service.json')
+        fetch('http://localhost:5000/service')
             .then(res => res.json())
             .then(data => setServices(data));
     }, [])
