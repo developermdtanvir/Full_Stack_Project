@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BsFillBagFill, BsSearch } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/logo.svg';
+import { AuthContext } from '../../../Context/AuthProvider';
 export const Header = () => {
+    const { logOutUser } = useContext(AuthContext)
     return (
         <div><div className="navbar bg-white  ">
             <div className="navbar-start">
@@ -13,6 +15,7 @@ export const Header = () => {
                     <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                         <Link className=' btn btn-primary' to="/">Home</Link>
                         <Link className=' btn btn-primary' to="/login">Login</Link>
+                        <Link className=' btn btn-primary' to="/order">Order</Link>
                     </ul>
                 </div>
                 <img src={logo} alt="" />
@@ -21,6 +24,8 @@ export const Header = () => {
                 <ul className="menu menu-horizontal px-1 space-x-5">
                     <Link className=' btn' to="/">Home</Link>
                     <Link className=' btn' to="/login">Login</Link>
+                    <button className=' btn' onClick={() => logOutUser()}>Log Out</button>
+                    <Link className=' btn' to="/order">Order</Link>
                 </ul>
             </div>
             <div className="navbar-end space-x-10">

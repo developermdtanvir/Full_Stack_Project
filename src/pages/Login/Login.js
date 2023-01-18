@@ -1,16 +1,41 @@
 import React, { useContext } from 'react';
 import { AiOutlineGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthProvider';
 
 export const Login = () => {
-    const { loginUser } = useContext(AuthContext)
+    const { loginUser, googleSignUp } = useContext(AuthContext);
+    let navigate = useNavigate();
+    let location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
+    const googleLogin = () => {
+        googleSignUp()
+            .then(res => {
+                const { email } = res.user
+                fetch('http://localhost:5000/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                }).then(res => res.json())
+                    .then(data => {
+                        localStorage.setItem('token', data.token)
+                    });
+
+                navigate(from, { replace: true });
+            })
+    }
+
     const handleSubmit = e => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         loginUser(email, password)
-            .then(res => console.log(res));
+            .then(res => {
+
+            });
 
         e.preventDefault()
     }
@@ -44,7 +69,7 @@ export const Login = () => {
                         </div>
                         <p>or signUp With </p>
                         <div className=' flex justify-around'>
-                            <FcGoogle className=' text-4xl cursor-pointer' />
+                            <FcGoogle onClick={googleLogin} className=' text-4xl cursor-pointer' />
                             <AiOutlineGithub className=' text-4xl cursor-pointer' />
                         </div>
                         <Link to='/signup'>or Sign Up</Link>
